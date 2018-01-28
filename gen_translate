@@ -1,0 +1,11 @@
+#!/bin/sh
+BASEDIR=$(dirname "$0")
+VOCABULARY="$1"
+TRANSLATE=$(mktemp)
+echo "#!/usr/bin/env node" > $TRANSLATE
+echo "const vocabulary = $( cat $VOCABULARY );" >> $TRANSLATE
+echo "const glossary = $( cat $BASEDIR/glossary.json );" >> $TRANSLATE
+perl -pi -e 's/\\/\\\\/g' $TRANSLATE
+cat $BASEDIR/_translate.part.js >> $TRANSLATE
+
+cat $TRANSLATE

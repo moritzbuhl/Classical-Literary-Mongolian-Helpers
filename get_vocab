@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+TEXT="$1"
+BASEDIR=$(dirname "$0")
+SPLIT_TEXT=$(mktemp)
+VOCABULARY=$(mktemp)
+TRANSLATE=$(mktemp)
+if [ ! -e "$BASEDIR/glossary.json" ]; then
+	$BASEDIR/create_glossary.js > $BASEDIR/glossary.json
+fi
+$BASEDIR/split_vocab.js $TEXT > $SPLIT_TEXT
+$BASEDIR/filter_vocab.js $SPLIT_TEXT > $VOCABULARY
+$BASEDIR/gen_translate $VOCABULARY > $TRANSLATE
+node $TRANSLATE
